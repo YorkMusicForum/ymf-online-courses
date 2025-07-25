@@ -4,73 +4,73 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>YMF Online Courses</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
   <style>
     body {
-      margin: 0;
       font-family: 'Muli', sans-serif;
       background: #fff;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      min-height: 100vh;
-      box-sizing: border-box;
+      color: #000;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
     }
     header {
-      text-align: center;
       margin-bottom: 40px;
     }
     header img {
-      max-width: 300px;
-      width: 80vw;
+      max-width: 150px; /* half of 300px */
+      width: 40vw;
       height: auto;
       margin-bottom: 20px;
+    }
+    @media (min-width: 600px) {
+      header img {
+        width: 150px;
+      }
     }
     h1 {
       font-family: 'Abeezee', sans-serif;
       color: #8b1453;
-      font-weight: normal;
-      margin: 0 0 12px 0;
-      font-size: 2.8rem;
+      margin-bottom: 0.5em;
     }
     p.description {
-      font-size: 1.15rem;
       max-width: 600px;
-      margin: 0 auto 30px auto;
-      line-height: 1.5;
+      margin: 0 auto 2em auto;
+      font-size: 1.1em;
     }
-    a.donate-btn {
+    a.donate-button {
       display: inline-block;
       background-color: #8b1453;
       color: white;
-      padding: 12px 28px;
-      font-size: 1.1rem;
-      text-decoration: none;
+      padding: 12px 25px;
+      font-weight: bold;
       border-radius: 5px;
+      text-decoration: none;
+      margin-top: 1em;
       transition: background-color 0.3s ease;
     }
-    a.donate-btn:hover,
-    a.donate-btn:focus {
-      background-color: #6a0e3f;
+    a.donate-button:hover {
+      background-color: #6a0f3f;
     }
-    main.courses-placeholder {
-      margin-top: 50px;
-      font-style: italic;
-      color: #777;
-      font-size: 1rem;
+    .course-list {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: left;
     }
-    @media (min-width: 600px) {
-      header img {
-        width: 300px;
-      }
-      h1 {
-        font-size: 3.6rem;
-      }
-      p.description {
-        font-size: 1.25rem;
-      }
+    .course-item {
+      border-bottom: 1px solid #ccc;
+      padding: 15px 0;
+    }
+    .course-item:last-child {
+      border-bottom: none;
+    }
+    .course-title {
+      font-family: 'Abeezee', sans-serif;
+      color: #8b1453;
+      margin: 0 0 0.2em 0;
+      font-size: 1.2em;
+    }
+    .course-description {
+      margin: 0.2em 0 0 0;
     }
   </style>
 </head>
@@ -78,11 +78,49 @@
   <header>
     <img src="ymf-logo.png" alt="York Music Forum Logo" />
     <h1>YMF Online Courses</h1>
-    <p class="description">Explore our free practical guides and lessons. No login required.</p>
-    <a href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km" target="_blank" rel="noopener" class="donate-btn">Donate</a>
+    <p class="description">
+      Explore our free practical guides and lessons. No login required.
+    </p>
+    <a href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km" class="donate-button" target="_blank" rel="noopener noreferrer">Donate</a>
   </header>
-  <main class="courses-placeholder">
-    Courses will appear here soon.
-  </main>
+
+  <section class="course-list" id="courseList">
+    <!-- Course items will be dynamically loaded here -->
+  </section>
+
+  <script>
+    // Example courses array - replace or expand with your actual courses
+    const courses = [
+      {
+        title: "Developing On The Trumpet: A Really Brief Practical Guide",
+        description: "Discover the essentials of trumpet playing with this self-paced, practical guide perfect for aspiring and intermediate players."
+      },
+      {
+        title: "Saxophone Embouchure Strength & Control",
+        description: "Build your saxophone embouchure strength and control with targeted exercises and practical advice."
+      }
+      // Add more courses here
+    ];
+
+    const courseList = document.getElementById('courseList');
+
+    courses.forEach(course => {
+      const courseItem = document.createElement('div');
+      courseItem.className = 'course-item';
+
+      const title = document.createElement('h2');
+      title.className = 'course-title';
+      title.textContent = course.title;
+
+      const desc = document.createElement('p');
+      desc.className = 'course-description';
+      desc.textContent = course.description;
+
+      courseItem.appendChild(title);
+      courseItem.appendChild(desc);
+
+      courseList.appendChild(courseItem);
+    });
+  </script>
 </body>
 </html>
