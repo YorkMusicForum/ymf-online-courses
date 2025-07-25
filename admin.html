@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>YMF Course Admin</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1.2em;
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.3em;
+    }
+    button {
+      margin-top: 1.5em;
+      padding: 0.8em 1.4em;
+      background-color: #8b1453;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #output {
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      padding: 1em;
+      margin-top: 2em;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>YMF Course Content Generator</h1>
+
+  <label for="title">Lesson Title:</label>
+  <input type="text" id="title" />
+
+  <label for="text">Lesson Text:</label>
+  <textarea id="text" rows="6"></textarea>
+
+  <label for="pdf">PDF Link (optional):</label>
+  <input type="text" id="pdf" placeholder="e.g. media/lesson1/sheet1.pdf" />
+
+  <label for="audio">Audio Link (optional):</label>
+  <input type="text" id="audio" placeholder="e.g. media/lesson1/example.mp3" />
+
+  <label for="image">Image Link (optional):</label>
+  <input type="text" id="image" placeholder="e.g. media/lesson1/example.png" />
+
+  <button onclick="generate()">Generate Lesson Page</button>
+
+  <h2>Generated HTML:</h2>
+  <div id="output"></div>
+
+  <script>
+    function generate() {
+      const title = document.getElementById("title").value;
+      const text = document.getElementById("text").value;
+      const pdf = document.getElementById("pdf").value;
+      const audio = document.getElementById("audio").value;
+      const image = document.getElementById("image").value;
+
+      let html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <style>
+    body {
+      font-family: Muli, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1rem;
+      line-height: 1.6;
+    }
+    h1 {
+      font-family: Abeezee, sans-serif;
+      color: #8b1453;
+    }
+    a {
+      color: #8b1453;
+    }
+  </style>
+</head>
+<body>
+  <h1>${title}</h1>
+  <p>${text.replace(/\n/g, '</p><p>')}</p>
+`;
+
+      if (pdf) {
+        html += `
+  <h2>Download Sheet Music</h2>
+  <p><a href="${pdf}" target="_blank">Download PDF</a></p>
+`;
+      }
+
+      if (image) {
+        html += `
+  <h2>Image</h2>
+  <img src="${image}" alt="Lesson image" style="max-width:100%; height:auto;" />
+`;
+      }
+
+      if (audio) {
+        html += `
+  <h2>Audio</h2>
+  <audio controls>
+    <source src="${audio}" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+`;
+      }
+
+      html += `
+</body>
+</html>
+`;
+
+      document.getElementById("output").textContent = html;
+    }
+  </script>
+</body>
+</html>
