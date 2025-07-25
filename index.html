@@ -1,37 +1,88 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>YMF Online Courses Test</title>
-    <style>
-      body {
-        background: white;
-        color: black;
-        font-family: Arial, sans-serif;
-        padding: 20px;
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YMF Online Courses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Muli', sans-serif;
+      background: #fff;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    header img {
+      max-width: 300px;
+      width: 80vw;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'Abeezee', sans-serif;
+      color: #8b1453;
+      font-weight: normal;
+      margin: 0 0 12px 0;
+      font-size: 2.8rem;
+    }
+    p.description {
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+      line-height: 1.5;
+    }
+    a.donate-btn {
+      display: inline-block;
+      background-color: #8b1453;
+      color: white;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    a.donate-btn:hover,
+    a.donate-btn:focus {
+      background-color: #6a0e3f;
+    }
+    main.courses-placeholder {
+      margin-top: 50px;
+      font-style: italic;
+      color: #777;
+      font-size: 1rem;
+    }
+    @media (min-width: 600px) {
+      header img {
+        width: 300px;
       }
-      img {
-        max-width: 200px;
-        height: auto;
+      h1 {
+        font-size: 3.6rem;
       }
-      .logo {
-        margin-bottom: 20px;
+      p.description {
+        font-size: 1.25rem;
       }
-      .donate-btn {
-        background-color: #8b1453;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 5px;
-        text-decoration: none;
-      }
-    </style>
-  </head>
-  <body>
-    <img src="ymf-logo.png" alt="YMF Logo" class="logo" />
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="ymf-logo.png" alt="York Music Forum Logo" />
     <h1>YMF Online Courses</h1>
-    <p>Explore our free practical guides and lessons. No login required.</p>
-    <a href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km" target="_blank" class="donate-btn">Donate</a>
-  </body>
+    <p class="description">Explore our free practical guides and lessons. No login required.</p>
+    <a href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km" target="_blank" rel="noopener" class="donate-btn">Donate</a>
+  </header>
+  <main class="courses-placeholder">
+    Courses will appear here soon.
+  </main>
+</body>
 </html>
