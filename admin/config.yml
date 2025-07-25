@@ -13,8 +13,33 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { name: "title", label: "Lesson Title", widget: "string" }
-      - { name: "body", label: "Lesson Content", widget: "markdown" }
-      - { name: "pdf", label: "Sheet Music PDF", widget: "file", required: false }
-      - { name: "audio", label: "Audio File", widget: "file", required: false }
-      - { name: "image", label: "Image", widget: "image", required: false }
+      - name: "title"
+        label: "Course Title"
+        widget: "string"
+      - name: "blocks"
+        label: "Content Blocks"
+        widget: "list"
+        types:
+          - label: "Text"
+            name: "text"
+            widget: "object"
+            fields:
+              - { name: "body", label: "Text", widget: "markdown" }
+          - label: "Image"
+            name: "image"
+            widget: "object"
+            fields:
+              - { name: "image", label: "Image File", widget: "image" }
+              - { name: "caption", label: "Caption", widget: "string", required: false }
+          - label: "Audio"
+            name: "audio"
+            widget: "object"
+            fields:
+              - { name: "audio", label: "Audio File", widget: "file" }
+              - { name: "description", label: "Description", widget: "string", required: false }
+          - label: "PDF"
+            name: "pdf"
+            widget: "object"
+            fields:
+              - { name: "pdf", label: "PDF File", widget: "file" }
+              - { name: "description", label: "Description", widget: "string", required: false }
