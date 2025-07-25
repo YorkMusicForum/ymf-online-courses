@@ -1,0 +1,20 @@
+backend:
+  name: github
+  repo: YOUR-USERNAME/ymf-online-courses
+  branch: main
+
+media_folder: "static/uploads"
+public_folder: "/static/uploads"
+
+collections:
+  - name: "courses"
+    label: "Courses"
+    folder: "courses"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: "title", label: "Lesson Title", widget: "string" }
+      - { name: "body", label: "Lesson Content", widget: "markdown" }
+      - { name: "pdf", label: "Sheet Music PDF", widget: "file", required: false }
+      - { name: "audio", label: "Audio File", widget: "file", required: false }
+      - { name: "image", label: "Image", widget: "image", required: false }
