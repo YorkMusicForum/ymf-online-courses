@@ -8,52 +8,63 @@
     body {
       font-family: 'Muli', sans-serif;
       margin: 0;
+      background: white;
+      color: black;
       padding: 20px;
-      background: #fff;
-      color: #000;
-      text-align: center;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
     }
     header {
+      display: flex;
+      align-items: center;
       margin-bottom: 30px;
     }
     header img {
-      max-width: 200px;
-      height: auto;
+      height: 60px;
+      margin-right: 15px;
     }
     h1 {
       font-family: 'Abeezee', sans-serif;
       color: #8b1453;
-      margin-top: 15px;
-      font-size: 2.5rem;
+      margin: 0;
     }
-    p.intro {
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin: 15px auto 40px;
+    p {
+      font-size: 1.1em;
+      line-height: 1.5em;
+      margin-top: 0;
     }
-    a.donate-button {
+    .donate-button {
       display: inline-block;
+      margin-top: 30px;
+      padding: 12px 25px;
       background-color: #8b1453;
-      color: #fff;
-      padding: 12px 30px;
+      color: white;
       font-weight: bold;
       text-decoration: none;
-      border-radius: 5px;
-      font-size: 1.2rem;
+      border-radius: 6px;
+      font-family: 'Abeezee', sans-serif;
       transition: background-color 0.3s ease;
     }
-    a.donate-button:hover {
-      background-color: #6e0f42;
+    .donate-button:hover {
+      background-color: #6a0f3f;
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
     <img src="ymf-logo.png" alt="York Music Forum Logo" />
     <h1>YMF Online Courses</h1>
   </header>
-  <p class="intro">
-    Explore our free practical guides and lessons. No login required.
-  </p>
-  <a class="donate-button" href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km" target="_blank"_
+
+  <p>Explore our free practical guides and lessons. No login required.</p>
+
+  <a
+    href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="donate-button"
+    >Donate</a
+  >
+</body>
+</html>
