@@ -2,17 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>YMF Online Courses</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <style>
+    body {
+      font-family: 'Muli', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+      text-align: center;
+    }
+    header {
+      margin-bottom: 30px;
+    }
+    header img {
+      max-width: 200px;
+      height: auto;
+    }
+    h1 {
+      font-family: 'Abeezee', sans-serif;
+      color: #8b1453;
+      margin-top: 15px;
+      font-size: 2.5rem;
+    }
+    p.intro {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 15px auto 40px;
+    }
+    a.donate-button {
+      display: inline-block;
+      background-color: #8b1453;
+      color: #fff;
+      padding: 12px 30px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease;
+    }
+    a.donate-button:hover {
+      background-color: #6e0f42;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
-    <img src="ymf-logo.png" alt="YMF Logo" class="logo">
+    <img src="ymf-logo.png" alt="York Music Forum Logo" />
     <h1>YMF Online Courses</h1>
-    <p>Explore our free practical guides and lessons. No login required.</p>
-    <a class="donate-button" href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km">Donate</a>
   </header>
-  <main id="courses"></main>
-  <script src="scripts/load-courses.js"></script>
-</body>
-</html>
+  <p class="intro">
+    Explore our free practical guides and lessons. No login required.
+  </p>
+  <a class="donate-button" href="https://buy.stripe.com/5kA2aJ0bCgHFfC05km" target="_blank"_
