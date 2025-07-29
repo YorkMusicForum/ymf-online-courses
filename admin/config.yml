@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: YorkMusicForum/ymf-online-courses
+  name: git-gateway
   branch: main
 
 media_folder: "static/uploads"
@@ -16,7 +15,6 @@ collections:
       - name: "title"
         label: "Course Title"
         widget: "string"
-
       - label: "Content Blocks"
         name: "blocks"
         widget: "list"
@@ -28,7 +26,6 @@ collections:
               - label: "Text"
                 name: "text"
                 widget: "markdown"
-
           - label: "Image"
             name: "image"
             widget: "object"
@@ -40,7 +37,6 @@ collections:
                 name: "alt"
                 widget: "string"
                 required: false
-
           - label: "Audio"
             name: "audio"
             widget: "object"
@@ -48,14 +44,10 @@ collections:
               - label: "Audio File"
                 name: "audio"
                 widget: "file"
-                media_library:
-                  config:
-                    multiple: false
               - label: "Caption"
                 name: "caption"
                 widget: "string"
                 required: false
-
           - label: "PDF (Sheet Music)"
             name: "pdf"
             widget: "object"
