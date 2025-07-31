@@ -13,10 +13,5 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
-      - label: "Media"
-        name: "media"
-        widget: "list"
-        fields:
-          - { label: "File", name: "file", widget: "image" }
-          - { label: "Description", name: "description", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Content", name: "body", widget: "markdown" }
