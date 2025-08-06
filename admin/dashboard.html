@@ -1,11 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YMF Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #8b1453;
+    }
+    #course-list {
+      margin-top: 2rem;
+    }
+    .course-item {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #8b1453;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+    button:hover {
+      background-color: #6c0f3e;
+    }
+    #logout {
+      float: right;
+      background-color: #aaa;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to the YMF Admin Dashboard</h1>
-  <p>This is a placeholder. We'll build the course editor here after login works.</p>
+  <h1>YMF Admin Dashboard</h1>
+  <button id="logout">Log Out</button>
+  <h2>Courses</h2>
+  <div id="course-list">Loading courses...</div>
+  <button id="add-course">Add New Course</button>
+
+  <script type="module">
+    // Firebase setup
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCp94HHzIFiZh5kZREi7ZIVVL67IMnHEXw",
+      authDomain: "ymf-messaging-platform.firebaseapp.com",
+      projectId: "ymf-messaging-platform",
+      storageBucket: "ymf-messaging-platform.appspot.com",
+      messagingSenderId: "820655157281",
+      appId: "1:820655157281:web:9713621443c068abd73360"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const courseList = document.getElementById("course-list");
+    const logoutBtn = document.getElementById("logout");
+    const addBtn = document.getElementById("add-course");
+
+    // Only show dashboard to logged-in admins
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/admin/login.html";
+        return;
+      }
+
+      const querySnapshot = await getDocs(collection(db, "courses"));
+      courseList.innerHTML = "";
+
+      if (querySnapshot.empty) {
+        courseList.innerHTML = "<p>No courses found.</p>";
+      }
+
+      querySnapshot.forEach((docSnap) => {
+        const course = docSnap.data();
+        const div = document.createElement("div");
+        div.className = "course-item";
+        div.innerHTML = `
+          <strong>${course.title || "(Untitled Course)"}</strong><br>
+          <em>${course.description || ""}</em><br><br>
+          <button onclick="editCourse('${docSnap.id}')">Edit</button>
+          <button onclick="deleteCourse('${docSnap.id}')">Delete</button>
+        `;
+        courseList.appendChild(div);
+      });
+    });
+
+    // Delete course
+    window.deleteCourse = async function (id) {
+      if (confirm("Are you sure you want to delete this course?")) {
+        await deleteDoc(doc(db, "courses", id));
+        location.reload();
+      }
+    }
+
+    // Edit course
+    window.editCourse = function (id) {
+      window.location.href = `/admin/edit.html?id=${id}`;
+    }
+
+    // Add new course
+    addBtn.onclick = function () {
+      window.location.href = "/admin/edit.html";
+    }
+
+    // Log out
+    logoutBtn.onclick = () => {
+      signOut(auth).then(() => {
+        window.location.href = "/admin/login.html";
+      });
+    };
+  </script>
 </body>
 </html>
