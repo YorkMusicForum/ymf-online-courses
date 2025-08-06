@@ -2,70 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YMF Admin Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+
   <style>
     body {
       font-family: 'Muli', sans-serif;
-      margin: 40px;
-      background: #fff;
-      color: #333;
+      margin: 2rem;
     }
-    header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 40px;
+
+    .logo {
+      max-width: 200px;
+      margin-bottom: 2rem;
     }
-    header img {
-      height: 60px;
-      margin-right: 20px;
-    }
+
     h1 {
-      font-family: 'Abeezee', serif;
+      font-family: 'ABeeZee', sans-serif;
+      font-size: 2rem;
       color: #8b1453;
-      margin: 0;
-      font-size: 2.5rem;
     }
-    section {
-      max-width: 700px;
+
+    .course {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background: #f9f9f9;
     }
-    h2 {
-      font-family: 'Abeezee', serif;
-      color: #8b1453;
-      margin-bottom: 10px;
-      font-size: 1.8rem;
-    }
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-    }
-    button {
+
+    .add-button {
       background-color: #8b1453;
       color: white;
+      padding: 10px 15px;
       border: none;
-      padding: 12px 30px;
-      font-size: 1.1rem;
+      border-radius: 4px;
       cursor: pointer;
-      border-radius: 5px;
-      font-family: 'Abeezee', serif;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #6e1040;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="/ymf-logo.png" alt="York Music Forum Logo" />
-    <h1>YMF Admin Dashboard</h1>
-  </header>
+  <img src="/ymf-logo.png" alt="YMF Logo" class="logo" />
+  <h1>YMF Admin Dashboard</h1>
+  <p>Welcome to the YMF Admin Dashboard.</p>
 
-  <section>
-    <h2>Courses</h2>
-    <p>No courses found</p>
-    <button onclick="location.href='add-course.html'">Add New Course</button>
-  </section>
+  <h2>Courses</h2>
+  <div id="courses-list">Loading courses...</div>
+
+  <button class="add-button" onclick="location.href='add-course.html'">Add New Course</button>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_KpIi1Qp79DjD_YEtOoAan3s4JuSm3rw",
+      authDomain: "ymf-online-course-platform.firebaseapp.com",
+      projectId: "ymf-online-course-platform",
+      storageBucket: "ymf-online-course-platform.firebasestorage.app",
+      messagingSenderId: "299504386356",
+      appId: "1:299504386356:web:7e49e64d3aa0bd85612561"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const coursesList = document.getElementById("courses-list");
+
+    async function loadCourses() {
+      try {
+        const q = query(collection(db, "courses"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          coursesList.innerHTML = "<p>No courses found.</p>";
+          return;
+        }
+
+        coursesList.innerHTML = "";
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "course";
+          div.innerHTML = `
+            <h3>${data.title}</h3>
+            <p>${data.description}</p>
+          `;
+          coursesList.appendChild(div);
+        });
+      } catch (error) {
+        coursesList.innerHTML = "<p>Error loading courses.</p>";
+        console.error("Error fetching courses:", error);
+      }
+    }
+
+    loadCourses();
+  </script>
 </body>
 </html>
+
+ 
