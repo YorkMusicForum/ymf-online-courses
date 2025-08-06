@@ -4,58 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YMF Admin Dashboard</title>
-  <link rel="stylesheet" href="/styles.css" />
-
+  <link href="https://fonts.googleapis.com/css2?family=ABeeZee&family=Muli&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Muli', sans-serif;
-      margin: 2rem;
+      margin: 20px;
+      background: #fff;
+      color: #000;
     }
-
-    .logo {
-      max-width: 200px;
-      margin-bottom: 2rem;
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
     }
-
+    header img {
+      height: 50px;
+    }
     h1 {
       font-family: 'ABeeZee', sans-serif;
-      font-size: 2rem;
       color: #8b1453;
     }
-
-    .course {
-      border: 1px solid #ddd;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      background: #f9f9f9;
-    }
-
-    .add-button {
+    button {
       background-color: #8b1453;
       color: white;
-      padding: 10px 15px;
       border: none;
-      border-radius: 4px;
+      padding: 10px 16px;
+      font-size: 14px;
       cursor: pointer;
-      margin-top: 1rem;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #a71d63;
+    }
+    .course {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .course h2 {
+      margin-top: 0;
+      font-family: 'ABeeZee', sans-serif;
+      color: #8b1453;
+    }
+    .course-buttons {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <img src="/ymf-logo.png" alt="YMF Logo" class="logo" />
-  <h1>YMF Admin Dashboard</h1>
-  <p>Welcome to the YMF Admin Dashboard.</p>
+  <header>
+    <img src="../ymf-logo.png" alt="YMF Logo" />
+    <h1>YMF Admin Dashboard</h1>
+  </header>
+
+  <p>Welcome to the YMF Admin Dashboard. Use the tools below to manage your courses.</p>
+
+  <button onclick="window.location.href='add-course.html'">Add New Course</button>
 
   <h2>Courses</h2>
-  <div id="courses-list">Loading courses...</div>
+  <div id="coursesList">Loading...</div>
 
-  <button class="add-button" onclick="location.href='add-course.html'">Add New Course</button>
-
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyC_KpIi1Qp79DjD_YEtOoAan3s4JuSm3rw",
@@ -69,39 +82,33 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const coursesList = document.getElementById("courses-list");
+    const coursesList = document.getElementById("coursesList");
 
     async function loadCourses() {
-      try {
-        const q = query(collection(db, "courses"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-          coursesList.innerHTML = "<p>No courses found.</p>";
-          return;
-        }
-
-        coursesList.innerHTML = "";
-
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          const div = document.createElement("div");
-          div.className = "course";
-          div.innerHTML = `
-            <h3>${data.title}</h3>
-            <p>${data.description}</p>
-          `;
-          coursesList.appendChild(div);
-        });
-      } catch (error) {
-        coursesList.innerHTML = "<p>Error loading courses.</p>";
-        console.error("Error fetching courses:", error);
+      const querySnapshot = await getDocs(collection(db, "courses"));
+      if (querySnapshot.empty) {
+        coursesList.innerHTML = "<p>No courses found.</p>";
+        return;
       }
+
+      coursesList.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const course = doc.data();
+        const courseDiv = document.createElement("div");
+        courseDiv.className = "course";
+
+        courseDiv.innerHTML = `
+          <h2>${course.title}</h2>
+          <p>${course.description || "No description"}</p>
+          <div class="course-buttons">
+            <button onclick="window.location.href='edit-course.html?id=${doc.id}'">Edit</button>
+          </div>
+        `;
+        coursesList.appendChild(courseDiv);
+      });
     }
 
     loadCourses();
   </script>
 </body>
 </html>
-
- 
