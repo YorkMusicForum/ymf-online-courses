@@ -33,6 +33,13 @@
       font-size: 14px;
       cursor: pointer;
       border-radius: 5px;
+      margin-right: 8px;
+    }
+    button.delete {
+      background-color: #c0392b;
+    }
+    button.delete:hover {
+      background-color: #e74c3c;
     }
     button:hover {
       background-color: #a71d63;
@@ -89,28 +96,21 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // List of allowed admin UIDs - add your UID here:
     const allowedAdmins = ["MuzmoEHMPiOOxzi3rKQMY8T9qCr2"];
 
     const coursesList = document.getElementById("coursesList");
     const errorDiv = document.getElementById("error");
 
-    // Check if user is signed in and allowed
     auth.onAuthStateChanged(user => {
       if (!user) {
-        // Not signed in, redirect to login
         window.location.href = "../login.html";
         return;
       }
-
       if (!allowedAdmins.includes(user.uid)) {
-        // User not allowed - show message and sign out
         errorDiv.textContent = "Access denied. You must be an admin to view this page.";
         auth.signOut();
         return;
       }
-
-      // User is admin, load courses
       loadCourses();
     });
 
@@ -121,7 +121,6 @@
           coursesList.innerHTML = "<p>No courses found.</p>";
           return;
         }
-
         coursesList.innerHTML = "";
         querySnapshot.forEach((doc) => {
           const course = doc.data();
@@ -133,12 +132,26 @@
             <p>${course.description || "No description"}</p>
             <div class="course-buttons">
               <button onclick="window.location.href='edit-course.html?id=${doc.id}'">Edit</button>
+              <button class="delete" onclick="deleteCourse('${doc.id}', '${course.title}')">Delete</button>
             </div>
           `;
           coursesList.appendChild(courseDiv);
         });
       } catch (error) {
         errorDiv.textContent = "Error loading courses: " + error.message;
+      }
+    }
+
+    function deleteCourse(courseId, courseTitle) {
+      if (confirm(`Are you sure you want to delete the course: "${courseTitle}"? This action cannot be undone.`)) {
+        db.collection("courses").doc(courseId).delete()
+          .then(() => {
+            alert(`Course "${courseTitle}" deleted successfully.`);
+            loadCourses(); // Refresh list
+          })
+          .catch(error => {
+            alert("Error deleting course: " + error.message);
+          });
       }
     }
   </script>
