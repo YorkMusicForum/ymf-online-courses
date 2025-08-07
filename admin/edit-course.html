@@ -3,434 +3,373 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Edit Course</title>
+  <title>Edit Course - York Music Forum</title>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=ABeeZee&family=Muli&display=swap" rel="stylesheet" />
-
-  <!-- Quill CSS -->
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
 
   <style>
     body {
       font-family: 'Muli', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fff;
+      margin: 20px;
+      background: #fff;
       color: #000;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
     }
-
     header {
       display: flex;
       align-items: center;
-      padding: 1rem;
-      background-color: #f8f8f8;
-      border-bottom: 1px solid #ddd;
-      gap: 1rem;
+      margin-bottom: 20px;
     }
-
     header img {
       height: 50px;
+      margin-right: 15px;
     }
-
-    header h1 {
-      font-family: 'ABeeZee', sans-serif;
+    h1 {
+      font-family: 'Abeezee', serif;
       color: #8b1453;
-      margin: 0;
     }
-
-    main {
-      padding: 2rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    textarea {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
-      margin-top: 0.5rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-
     button {
-      margin-top: 1rem;
       background-color: #8b1453;
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1rem;
+      padding: 8px 12px;
+      margin: 5px 0;
       cursor: pointer;
+      border-radius: 4px;
+      font-family: 'Muli', sans-serif;
     }
-
     button:hover {
-      background-color: #a61c66;
+      background-color: #6e0f3f;
     }
-
-    .content-block {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1rem;
-      position: relative;
-    }
-
-    .content-block button.delete-block {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background-color: #c0392b;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      padding: 4px 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-
-    .content-block button.delete-block:hover {
-      background-color: #e74c3c;
-    }
-
-    .quill-editor {
-      height: 150px;
-    }
-
-    .image-preview {
-      max-width: 100%;
-      height: auto;
-      margin-top: 0.5rem;
-      border-radius: 6px;
+    .content-box {
       border: 1px solid #ddd;
-    }
-
-    audio {
-      margin-top: 0.5rem;
-      width: 100%;
-      outline: none;
+      padding: 12px;
+      margin-bottom: 15px;
       border-radius: 6px;
     }
-
-    #addBlockButtons {
-      margin-top: 1.5rem;
-      display: flex;
-      gap: 1rem;
+    .content-box textarea {
+      width: 100%;
+      min-height: 60px;
+      font-family: 'Muli', sans-serif;
+      font-size: 14px;
+      margin-top: 5px;
     }
-
-    #addBlockButtons > button {
-      flex: 1;
+    .content-box label {
+      font-weight: bold;
+      font-family: 'Abeezee', serif;
     }
-
-    #saveCourseBtn, #backToDashboardBtn {
-      margin-top: 2rem;
-      width: 48%;
-      display: inline-block;
+    .content-box img,
+    .content-box audio {
+      max-width: 100%;
+      margin-top: 10px;
     }
-
-    #backToDashboardBtn {
-      background-color: #777;
+    .upload-label {
+      display: block;
+      margin-top: 8px;
+      font-family: 'Muli', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      color: #8b1453;
     }
-    #backToDashboardBtn:hover {
-      background-color: #555;
+    .upload-label:hover {
+      text-decoration: underline;
     }
-
-    .uploading-text {
-      font-style: italic;
-      color: #666;
-      margin-top: 0.5rem;
+    .file-input {
+      display: none;
+    }
+    #saveCourseBtn {
+      margin-top: 20px;
+      font-size: 16px;
+      padding: 10px 20px;
+    }
+    #deleteCourseBtn {
+      margin-left: 10px;
+      background-color: #c1272d;
+    }
+    #deleteCourseBtn:hover {
+      background-color: #911b1f;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="../ymf-logo.png" alt="York Music Forum Logo" />
+    <img src="ymf-logo.png" alt="York Music Forum Logo" />
     <h1>Edit Course</h1>
   </header>
 
-  <main>
-    <label for="courseTitle">Course Title</label>
-    <input type="text" id="courseTitle" placeholder="Enter course title" />
+  <div>
+    <label for="courseTitle"><strong>Course Title:</strong></label><br />
+    <input type="text" id="courseTitle" style="width: 100%; padding: 8px; font-size: 18px;" />
+  </div>
 
-    <label for="courseDescription">Course Description</label>
-    <textarea id="courseDescription" rows="3" placeholder="Enter course description"></textarea>
+  <div id="contentBoxesContainer" style="margin-top: 25px;"></div>
 
-    <div id="contentBlocksContainer"></div>
+  <button id="addTextBoxBtn">+ Add Text Box</button>
+  <button id="addImageBoxBtn">+ Add Image Box</button>
+  <button id="addAudioBoxBtn">+ Add Audio Box</button>
 
-    <div id="addBlockButtons">
-      <button id="addTextBlockBtn">Add Text Block</button>
-      <button id="addImageBlockBtn">Add Image Block</button>
-      <button id="addAudioBlockBtn">Add Audio Block</button>
-    </div>
+  <br />
 
-    <input type="file" id="imageUploadInput" accept="image/*" style="display:none" />
-    <input type="file" id="audioUploadInput" accept="audio/*" style="display:none" />
+  <button id="saveCourseBtn">Save Course</button>
+  <button id="deleteCourseBtn">Delete Course</button>
 
-    <button id="saveCourseBtn">Save All Changes</button>
-    <button id="backToDashboardBtn">Back to Dashboard</button>
-  </main>
-
-  <!-- Quill JS -->
-  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
   <script>
-    // Firebase config and init
+    // Firebase config - your project
     const firebaseConfig = {
-      apiKey: "AIzaSyC_KpIi1Qp79DjD_YEtOoAan3s4JuSm3rw",
+      apiKey: "AIzaSyCp94HHzIFiZh5kZREi7ZIVVL67IMnHEXw",
       authDomain: "ymf-online-course-platform.firebaseapp.com",
       projectId: "ymf-online-course-platform",
-      storageBucket: "ymf-online-course-platform.firebasestorage.app",
-      messagingSenderId: "299504386356",
-      appId: "1:299504386356:web:7e49e64d3aa0bd85612561"
+      storageBucket: "ymf-online-course-platform.appspot.com",
+      messagingSenderId: "820655157281",
+      appId: "1:820655157281:web:9713621443c068abd73360"
     };
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    // Helpers
+    // Get course ID from URL (e.g. edit-course.html?id=COURSEID)
     const urlParams = new URLSearchParams(window.location.search);
-    const courseId = urlParams.get("id");
+    const courseId = urlParams.get('id');
+
     if (!courseId) {
-      alert("No course ID provided.");
-      window.location.href = "index.html";
+      alert("No course ID specified in URL.");
+      window.location.href = "admin.html"; // Redirect back to admin or course list
     }
 
-    // DOM elements
-    const courseTitleInput = document.getElementById("courseTitle");
-    const courseDescriptionInput = document.getElementById("courseDescription");
-    const contentBlocksContainer = document.getElementById("contentBlocksContainer");
-    const addTextBlockBtn = document.getElementById("addTextBlockBtn");
-    const addImageBlockBtn = document.getElementById("addImageBlockBtn");
-    const addAudioBlockBtn = document.getElementById("addAudioBlockBtn");
-    const imageUploadInput = document.getElementById("imageUploadInput");
-    const audioUploadInput = document.getElementById("audioUploadInput");
-    const saveCourseBtn = document.getElementById("saveCourseBtn");
-    const backToDashboardBtn = document.getElementById("backToDashboardBtn");
+    // Keep track of content boxes in memory as array of objects
+    let contentBoxes = [];
 
-    // Data
-    let contentBlocks = [];
-    const quillEditors = {}; // key: index of block, value: Quill instance
+    // Check user login status
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        // Not logged in, redirect to login page
+        window.location.href = "login.html";
+      } else {
+        // Load course data
+        loadCourse();
+      }
+    });
 
-    // Load course from Firestore
-    async function loadCourse() {
-      try {
-        const docRef = db.collection("courses").doc(courseId);
-        const docSnap = await docRef.get();
-        if (!docSnap.exists) {
-          alert("Course not found");
-          window.location.href = "index.html";
+    // Load course data from Firestore
+    function loadCourse() {
+      db.collection('courses').doc(courseId).get()
+        .then(doc => {
+          if (!doc.exists) {
+            alert("Course not found.");
+            window.location.href = "admin.html";
+            return;
+          }
+          const course = doc.data();
+          document.getElementById('courseTitle').value = course.title || '';
+          contentBoxes = course.contentBoxes || [];
+          renderContentBoxes();
+        })
+        .catch(error => {
+          alert("Error loading course: " + error.message);
+        });
+    }
+
+    // Render all content boxes on page
+    function renderContentBoxes() {
+      const container = document.getElementById('contentBoxesContainer');
+      container.innerHTML = ''; // Clear existing
+
+      contentBoxes.forEach((box, index) => {
+        const boxDiv = document.createElement('div');
+        boxDiv.className = 'content-box';
+        boxDiv.dataset.index = index;
+
+        // Common delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete Box';
+        deleteBtn.style.float = 'right';
+        deleteBtn.onclick = () => {
+          if (confirm('Delete this content box?')) {
+            contentBoxes.splice(index, 1);
+            renderContentBoxes();
+          }
+        };
+        boxDiv.appendChild(deleteBtn);
+
+        if (box.type === 'text') {
+          const label = document.createElement('label');
+          label.textContent = 'Text Content:';
+          boxDiv.appendChild(label);
+
+          const textarea = document.createElement('textarea');
+          textarea.value = box.text || '';
+          textarea.oninput = e => {
+            contentBoxes[index].text = e.target.value;
+          };
+          boxDiv.appendChild(textarea);
+
+        } else if (box.type === 'image') {
+          const label = document.createElement('label');
+          label.textContent = 'Image:';
+          boxDiv.appendChild(label);
+
+          if (box.url) {
+            const img = document.createElement('img');
+            img.src = box.url;
+            img.alt = "Uploaded image";
+            boxDiv.appendChild(img);
+          }
+
+          // Upload new image file input
+          const uploadLabel = document.createElement('label');
+          uploadLabel.textContent = 'Upload/change image';
+          uploadLabel.className = 'upload-label';
+
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.className = 'file-input';
+          fileInput.onchange = e => {
+            const file = e.target.files[0];
+            if (file) {
+              uploadFile(file, 'images').then(url => {
+                contentBoxes[index].url = url;
+                renderContentBoxes();
+              }).catch(err => {
+                alert('Upload failed: ' + err.message);
+              });
+            }
+          };
+
+          uploadLabel.appendChild(fileInput);
+          boxDiv.appendChild(uploadLabel);
+
+        } else if (box.type === 'audio') {
+          const label = document.createElement('label');
+          label.textContent = 'Audio:';
+          boxDiv.appendChild(label);
+
+          if (box.url) {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = box.url;
+            boxDiv.appendChild(audio);
+          }
+
+          // Upload new audio file input
+          const uploadLabel = document.createElement('label');
+          uploadLabel.textContent = 'Upload/change audio';
+          uploadLabel.className = 'upload-label';
+
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'audio/*';
+          fileInput.className = 'file-input';
+          fileInput.onchange = e => {
+            const file = e.target.files[0];
+            if (file) {
+              uploadFile(file, 'audio').then(url => {
+                contentBoxes[index].url = url;
+                renderContentBoxes();
+              }).catch(err => {
+                alert('Upload failed: ' + err.message);
+              });
+            }
+          };
+
+          uploadLabel.appendChild(fileInput);
+          boxDiv.appendChild(uploadLabel);
+        }
+
+        container.appendChild(boxDiv);
+      });
+    }
+
+    // Upload file to Firebase Storage in given folder and return download URL
+    function uploadFile(file, folder) {
+      return new Promise((resolve, reject) => {
+        const user = auth.currentUser;
+        if (!user) {
+          reject(new Error('User not authenticated.'));
           return;
         }
-        const courseData = docSnap.data();
-        courseTitleInput.value = courseData.title || "";
-        courseDescriptionInput.value = courseData.description || "";
-        contentBlocks = courseData.contentBlocks || [];
-        renderContentBlocks();
-      } catch (error) {
-        alert("Error loading course: " + error.message);
-      }
-    }
 
-    // Render all content blocks
-    function renderContentBlocks() {
-      // Clear editors and container
-      Object.values(quillEditors).forEach((quill) => {
-        if (quill) quill.disable();
-      });
-      for (const key in quillEditors) {
-        delete quillEditors[key];
-      }
-      contentBlocksContainer.innerHTML = "";
+        const storageRef = storage.ref();
+        // Unique filename using course ID + timestamp + original name
+        const filename = `${courseId}/${folder}/${Date.now()}_${file.name}`;
+        const fileRef = storageRef.child(filename);
 
-      contentBlocks.forEach((block, index) => {
-        const blockDiv = document.createElement("div");
-        blockDiv.className = "content-block";
+        const uploadTask = fileRef.put(file);
 
-        // Delete button
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-        deleteBtn.className = "delete-block";
-        deleteBtn.onclick = () => {
-          contentBlocks.splice(index, 1);
-          renderContentBlocks();
-        };
-        blockDiv.appendChild(deleteBtn);
-
-        if (block.type === "text") {
-          const editorDiv = document.createElement("div");
-          editorDiv.className = "quill-editor";
-          blockDiv.appendChild(editorDiv);
-
-          // Initialize Quill editor for this block
-          const quill = new Quill(editorDiv, {
-            theme: "snow",
-            modules: {
-              toolbar: [
-                [{ header: [1, 2, false] }],
-                ["bold", "italic", "underline"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["link"],
-                ["clean"],
-              ],
-            },
-          });
-
-          quill.root.innerHTML = block.text || "";
-          quillEditors[index] = quill;
-        } else if (block.type === "image") {
-          if (block.uploading) {
-            const uploadingText = document.createElement("div");
-            uploadingText.className = "uploading-text";
-            uploadingText.textContent = "Uploading image...";
-            blockDiv.appendChild(uploadingText);
-          } else if (block.url) {
-            const img = document.createElement("img");
-            img.src = block.url;
-            img.alt = "Course Image";
-            img.className = "image-preview";
-            blockDiv.appendChild(img);
+        uploadTask.on('state_changed', 
+          snapshot => {
+            // You can show upload progress here if you want
+          },
+          error => {
+            reject(error);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+              resolve(downloadURL);
+            });
           }
-        } else if (block.type === "audio") {
-          if (block.uploading) {
-            const uploadingText = document.createElement("div");
-            uploadingText.className = "uploading-text";
-            uploadingText.textContent = "Uploading audio...";
-            blockDiv.appendChild(uploadingText);
-          } else if (block.url) {
-            const audio = document.createElement("audio");
-            audio.controls = true;
-            audio.src = block.url;
-            blockDiv.appendChild(audio);
-          }
-        }
-
-        contentBlocksContainer.appendChild(blockDiv);
+        );
       });
     }
 
-    // Add new text block
-    addTextBlockBtn.addEventListener("click", () => {
-      contentBlocks.push({ type: "text", text: "" });
-      renderContentBlocks();
-    });
+    // Add new empty text box
+    document.getElementById('addTextBoxBtn').onclick = () => {
+      contentBoxes.push({ type: 'text', text: '' });
+      renderContentBoxes();
+    };
 
-    // Add new image block (trigger file input)
-    addImageBlockBtn.addEventListener("click", () => {
-      imageUploadInput.click();
-    });
+    // Add new empty image box
+    document.getElementById('addImageBoxBtn').onclick = () => {
+      contentBoxes.push({ type: 'image', url: '' });
+      renderContentBoxes();
+    };
 
-    // Add new audio block (trigger file input)
-    addAudioBlockBtn.addEventListener("click", () => {
-      audioUploadInput.click();
-    });
+    // Add new empty audio box
+    document.getElementById('addAudioBoxBtn').onclick = () => {
+      contentBoxes.push({ type: 'audio', url: '' });
+      renderContentBoxes();
+    };
 
-    // Handle image upload
-    imageUploadInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const newBlock = { type: "image", url: "", uploading: true };
-      contentBlocks.push(newBlock);
-      renderContentBlocks();
-
-      const index = contentBlocks.length - 1;
-      const storageRef = storage.ref(`course-content/${courseId}/images/${Date.now()}_${file.name}`);
-      const uploadTask = storageRef.put(file);
-
-      uploadTask.on(
-        "state_changed",
-        null,
-        (error) => {
-          alert("Image upload failed: " + error.message);
-          contentBlocks.splice(index, 1);
-          renderContentBlocks();
-        },
-        () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            contentBlocks[index].url = downloadURL;
-            delete contentBlocks[index].uploading;
-            renderContentBlocks();
-          });
-        }
-      );
-
-      imageUploadInput.value = "";
-    });
-
-    // Handle audio upload
-    audioUploadInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const newBlock = { type: "audio", url: "", uploading: true };
-      contentBlocks.push(newBlock);
-      renderContentBlocks();
-
-      const index = contentBlocks.length - 1;
-      const storageRef = storage.ref(`course-content/${courseId}/audio/${Date.now()}_${file.name}`);
-      const uploadTask = storageRef.put(file);
-
-      uploadTask.on(
-        "state_changed",
-        null,
-        (error) => {
-          alert("Audio upload failed: " + error.message);
-          contentBlocks.splice(index, 1);
-          renderContentBlocks();
-        },
-        () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            contentBlocks[index].url = downloadURL;
-            delete contentBlocks[index].uploading;
-            renderContentBlocks();
-          });
-        }
-      );
-
-      audioUploadInput.value = "";
-    });
-
-    // Save changes to Firestore
-    saveCourseBtn.addEventListener("click", async () => {
-      // Update text blocks from quill editors
-      Object.entries(quillEditors).forEach(([indexStr, quill]) => {
-        const idx = Number(indexStr);
-        contentBlocks[idx].text = quill.root.innerHTML;
-      });
-
-      try {
-        await db.collection("courses").doc(courseId).update({
-          title: courseTitleInput.value,
-          description: courseDescriptionInput.value,
-          contentBlocks: contentBlocks,
-        });
-        alert("Course saved successfully!");
-      } catch (error) {
-        alert("Failed to save course: " + error.message);
+    // Save course data to Firestore
+    document.getElementById('saveCourseBtn').onclick = () => {
+      const title = document.getElementById('courseTitle').value.trim();
+      if (!title) {
+        alert('Please enter a course title.');
+        return;
       }
-    });
+      db.collection('courses').doc(courseId).set({
+        title: title,
+        contentBoxes: contentBoxes
+      }).then(() => {
+        alert('Course saved successfully.');
+      }).catch(error => {
+        alert('Error saving course: ' + error.message);
+      });
+    };
 
-    backToDashboardBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    // Delete course and redirect back to admin
+    document.getElementById('deleteCourseBtn').onclick = () => {
+      if (confirm('Are you sure you want to delete this course? This action cannot be undone.')) {
+        db.collection('courses').doc(courseId).delete()
+          .then(() => {
+            alert('Course deleted.');
+            window.location.href = 'admin.html';
+          })
+          .catch(error => {
+            alert('Error deleting course: ' + error.message);
+          });
+      }
+    };
 
-    loadCourse();
   </script>
 </body>
 </html>
