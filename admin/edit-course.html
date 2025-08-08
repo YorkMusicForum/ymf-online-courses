@@ -206,15 +206,22 @@
         fileInput.type = "file";
         fileInput.accept = "image/*";
         fileInput.style.display = "none";
+
         fileInput.onchange = async () => {
-          const file = fileInput.files[0];
-          const storageRef = storage.ref(`uploads/${Date.now()}-${file.name}`);
-          await storageRef.put(file);
-          const url = await storageRef.getDownloadURL();
-          img.src = url;
-          status.style.display = "none";
-          contentBlocks.push({ type: "image", url });
+          try {
+            const file = fileInput.files[0];
+            const storageRef = storage.ref(`uploads/${Date.now()}-${file.name}`);
+            await storageRef.put(file);
+            const url = await storageRef.getDownloadURL();
+            img.src = url;
+            status.style.display = "none";
+            contentBlocks.push({ type: "image", url });
+          } catch (error) {
+            alert("Image upload failed: " + error.message);
+            status.textContent = "Upload failed.";
+          }
         };
+
         block.appendChild(fileInput);
         fileInput.click();
       }
@@ -248,15 +255,22 @@
         fileInput.type = "file";
         fileInput.accept = "audio/*";
         fileInput.style.display = "none";
+
         fileInput.onchange = async () => {
-          const file = fileInput.files[0];
-          const storageRef = storage.ref(`uploads/${Date.now()}-${file.name}`);
-          await storageRef.put(file);
-          const url = await storageRef.getDownloadURL();
-          audio.src = url;
-          status.style.display = "none";
-          contentBlocks.push({ type: "audio", url });
+          try {
+            const file = fileInput.files[0];
+            const storageRef = storage.ref(`uploads/${Date.now()}-${file.name}`);
+            await storageRef.put(file);
+            const url = await storageRef.getDownloadURL();
+            audio.src = url;
+            status.style.display = "none";
+            contentBlocks.push({ type: "audio", url });
+          } catch (error) {
+            alert("Audio upload failed: " + error.message);
+            status.textContent = "Upload failed.";
+          }
         };
+
         block.appendChild(fileInput);
         fileInput.click();
       }
