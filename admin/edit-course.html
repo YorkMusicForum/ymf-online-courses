@@ -2,97 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Edit Course - York Music Forum</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abeezee&family=Muli&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Course</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=ABeeZee&family=Muli&display=swap" rel="stylesheet"/>
+
+  <!-- Quill Rich Text Editor -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
   <style>
     body {
       font-family: 'Muli', sans-serif;
-      background: #fff;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
       color: #000;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1rem;
     }
+
     header {
       display: flex;
       align-items: center;
-      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #f8f8f8;
+      border-bottom: 1px solid #ddd;
     }
+
     header img {
       height: 50px;
       margin-right: 1rem;
     }
-    h1 {
-      font-family: 'Abeezee', serif;
+
+    header h1 {
+      font-family: 'ABeeZee', sans-serif;
       color: #8b1453;
+      margin: 0;
     }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .block {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .block label {
+      margin-top: 0;
+    }
+
     button {
+      margin-top: 1rem;
       background-color: #8b1453;
       color: white;
       border: none;
-      padding: 0.4rem 0.8rem;
-      margin: 0.2rem;
-      cursor: pointer;
-      border-radius: 4px;
-      font-family: 'Muli', sans-serif;
-    }
-    button:hover {
-      background-color: #a02167;
-    }
-    .content-box {
-      border: 1px solid #ccc;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 6px;
-      background: #f9f9f9;
-    }
-    .content-box textarea {
-      width: 100%;
-      height: 100px;
-      font-family: 'Muli', sans-serif;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
       font-size: 1rem;
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
+      cursor: pointer;
     }
-    .content-box input[type="file"] {
-      margin-bottom: 0.5rem;
+
+    button:hover {
+      background-color: #a61c66;
+    }
+
+    .block-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .uploading {
+      font-style: italic;
+      color: #888;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="../ymf-logo.png" alt="York Music Forum Logo" />
+    <img src="/ymf-logo.png" alt="York Music Forum Logo">
     <h1>Edit Course</h1>
   </header>
 
-  <div id="course-title-container">
-    <label for="course-title">Course Title:</label><br />
-    <input type="text" id="course-title" style="width: 100%; font-size: 1.2rem; padding: 0.3rem;" />
-  </div>
+  <main>
+    <label for="title">Course Title</label>
+    <input type="text" id="course-title" />
 
-  <h2>Content Boxes</h2>
-  <div id="content-boxes"></div>
+    <label for="description">Course Description</label>
+    <textarea id="course-description" rows="4"></textarea>
 
-  <button id="add-text-box">Add Text Box</button>
-  <button id="add-image-box">Add Image Box</button>
-  <button id="add-audio-box">Add Audio Box</button>
-  <br /><br />
-  <button id="save-course">Save Course</button>
+    <div class="block-buttons">
+      <button onclick="addTextBlock()">Add Text Block</button>
+      <button onclick="addImageBlock()">Add Image Block</button>
+      <button onclick="addAudioBlock()">Add Audio Block</button>
+    </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <div id="content-container"></div>
+
+    <button onclick="saveCourse()">Save Course</button>
+  </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+  <!-- Quill -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
   <script>
-    // Firebase config - replace with your project's config if needed
     const firebaseConfig = {
-      apiKey: "AIzaSyCp94HHzIFiZh5kZREi7ZIVVL67IMnHEXw",
+      apiKey: "AIzaSyC_KpIi1Qp79DjD_YEtOoAan3s4JuSm3rw",
       authDomain: "ymf-online-course-platform.firebaseapp.com",
       projectId: "ymf-online-course-platform",
       storageBucket: "ymf-online-course-platform.appspot.com",
-      messagingSenderId: "820655157281",
-      appId: "1:820655157281:web:9713621443c068abd73360"
+      messagingSenderId: "299504386356",
+      appId: "1:299504386356:web:7e49e64d3aa0bd85612561"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -100,198 +147,172 @@
     const storage = firebase.storage();
 
     const urlParams = new URLSearchParams(window.location.search);
-    const courseId = urlParams.get('id');
+    const courseId = urlParams.get("id");
 
-    const courseTitleInput = document.getElementById('course-title');
-    const contentBoxesDiv = document.getElementById('content-boxes');
-    const addTextBtn = document.getElementById('add-text-box');
-    const addImageBtn = document.getElementById('add-image-box');
-    const addAudioBtn = document.getElementById('add-audio-box');
-    const saveBtn = document.getElementById('save-course');
+    const titleInput = document.getElementById("course-title");
+    const descriptionInput = document.getElementById("course-description");
+    const contentContainer = document.getElementById("content-container");
 
-    let contentBoxes = [];
+    const contentBlocks = [];
 
-    function createContentBox(type, content = '') {
-      const boxId = 'box-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    function addTextBlock(existing = null) {
+      const block = document.createElement("div");
+      block.className = "block";
 
-      const div = document.createElement('div');
-      div.className = 'content-box';
-      div.dataset.id = boxId;
-      div.dataset.type = type;
+      const label = document.createElement("label");
+      label.textContent = "Text Block";
+      block.appendChild(label);
 
-      if (type === 'text') {
-        const textarea = document.createElement('textarea');
-        textarea.value = content;
-        div.appendChild(textarea);
-      } else if (type === 'image') {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
+      const editorDiv = document.createElement("div");
+      editorDiv.style.height = "150px";
+      block.appendChild(editorDiv);
 
-        const preview = document.createElement('img');
-        preview.style.maxWidth = '100%';
-        preview.style.display = content ? 'block' : 'none';
-        preview.src = content || '';
+      contentContainer.appendChild(block);
 
-        fileInput.addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              preview.src = e.target.result;
-              preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-
-        div.appendChild(fileInput);
-        div.appendChild(preview);
-      } else if (type === 'audio') {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'audio/*';
-
-        const audioPreview = document.createElement('audio');
-        audioPreview.controls = true;
-        audioPreview.style.display = content ? 'block' : 'none';
-        audioPreview.src = content || '';
-
-        fileInput.addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              audioPreview.src = e.target.result;
-              audioPreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-
-        div.appendChild(fileInput);
-        div.appendChild(audioPreview);
-      }
-
-      // Add delete button
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = 'Delete';
-      deleteBtn.style.marginTop = '0.5rem';
-      deleteBtn.addEventListener('click', () => {
-        contentBoxesDiv.removeChild(div);
-        contentBoxes = contentBoxes.filter(box => box.id !== boxId);
+      const quill = new Quill(editorDiv, {
+        theme: 'snow'
       });
-      div.appendChild(deleteBtn);
 
-      contentBoxesDiv.appendChild(div);
+      if (existing) quill.root.innerHTML = existing.content;
 
-      // Add to contentBoxes array
-      contentBoxes.push({ id: boxId, type, element: div });
-
-      return div;
+      contentBlocks.push({ type: "text", quill });
     }
 
-    // Load course data from Firestore
-    async function loadCourse() {
-      if (!courseId) {
-        alert('No course ID specified');
+    function addImageBlock(existing = null) {
+      const block = document.createElement("div");
+      block.className = "block";
+
+      const label = document.createElement("label");
+      label.textContent = "Image Block";
+      block.appendChild(label);
+
+      const status = document.createElement("div");
+      status.className = "uploading";
+      status.textContent = existing ? "Image loaded." : "Uploading image...";
+      block.appendChild(status);
+
+      const img = document.createElement("img");
+      img.style.maxWidth = "100%";
+      block.appendChild(img);
+
+      contentContainer.appendChild(block);
+
+      if (existing) {
+        img.src = existing.url;
+        status.style.display = "none";
+        contentBlocks.push({ type: "image", url: existing.url });
+      } else {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.style.display = "none";
+        fileInput.onchange = async () => {
+          const file = fileInput.files[0];
+          const storageRef = storage.ref(`uploads/${Date.now()}-${file.name}`);
+          await storageRef.put(file);
+          const url = await storageRef.getDownloadURL();
+          img.src = url;
+          status.style.display = "none";
+          contentBlocks.push({ type: "image", url });
+        };
+        block.appendChild(fileInput);
+        fileInput.click();
+      }
+    }
+
+    function addAudioBlock(existing = null) {
+      const block = document.createElement("div");
+      block.className = "block";
+
+      const label = document.createElement("label");
+      label.textContent = "Audio Block";
+      block.appendChild(label);
+
+      const status = document.createElement("div");
+      status.className = "uploading";
+      status.textContent = existing ? "Audio loaded." : "Uploading audio...";
+      block.appendChild(status);
+
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      block.appendChild(audio);
+
+      contentContainer.appendChild(block);
+
+      if (existing) {
+        audio.src = existing.url;
+        status.style.display = "none";
+        contentBlocks.push({ type: "audio", url: existing.url });
+      } else {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "audio/*";
+        fileInput.style.display = "none";
+        fileInput.onchange = async () => {
+          const file = fileInput.files[0];
+          const storageRef = storage.ref(`uploads/${Date.now()}-${file.name}`);
+          await storageRef.put(file);
+          const url = await storageRef.getDownloadURL();
+          audio.src = url;
+          status.style.display = "none";
+          contentBlocks.push({ type: "audio", url });
+        };
+        block.appendChild(fileInput);
+        fileInput.click();
+      }
+    }
+
+    function saveCourse() {
+      const title = titleInput.value.trim();
+      const description = descriptionInput.value.trim();
+      if (!title || !description) {
+        alert("Please fill out the title and description.");
         return;
       }
-      try {
-        const doc = await db.collection('courses').doc(courseId).get();
-        if (!doc.exists) {
-          alert('Course not found');
-          return;
+
+      const content = contentBlocks.map(block => {
+        if (block.type === "text") {
+          return { type: "text", content: block.quill.root.innerHTML };
+        } else if (block.type === "image" || block.type === "audio") {
+          return { type: block.type, url: block.url };
         }
-        const course = doc.data();
-        courseTitleInput.value = course.title || '';
+      });
 
-        // Clear existing boxes
-        contentBoxesDiv.innerHTML = '';
-        contentBoxes = [];
+      db.collection("courses").doc(courseId).set({
+        title,
+        description,
+        content,
+        updatedAt: new Date()
+      }, { merge: true }).then(() => {
+        alert("Course saved successfully.");
+        window.location.href = "dashboard.html";
+      }).catch(err => {
+        console.error("Save failed", err);
+        alert("Error saving course.");
+      });
+    }
 
-        if (course.content && Array.isArray(course.content)) {
-          for (const box of course.content) {
-            createContentBox(box.type, box.content);
+    function loadCourse() {
+      if (!courseId) return;
+
+      db.collection("courses").doc(courseId).get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          titleInput.value = data.title;
+          descriptionInput.value = data.description;
+
+          if (Array.isArray(data.content)) {
+            data.content.forEach(block => {
+              if (block.type === "text") addTextBlock(block);
+              if (block.type === "image") addImageBlock(block);
+              if (block.type === "audio") addAudioBlock(block);
+            });
           }
         }
-      } catch (error) {
-        console.error('Error loading course:', error);
-        alert('Error loading course data.');
-      }
+      });
     }
 
-    // Upload file to Firebase Storage and return URL
-    async function uploadFile(file, path) {
-      const storageRef = storage.ref();
-      const fileRef = storageRef.child(path);
-      await fileRef.put(file);
-      return await fileRef.getDownloadURL();
-    }
-
-    // Save course data to Firestore
-    async function saveCourse() {
-      const title = courseTitleInput.value.trim();
-      if (!title) {
-        alert('Course title cannot be empty');
-        return;
-      }
-
-      // Prepare content array with uploaded URLs
-      const contentData = [];
-
-      for (const box of contentBoxes) {
-        const type = box.type;
-        const el = box.element;
-        if (type === 'text') {
-          const text = el.querySelector('textarea').value.trim();
-          contentData.push({ type: 'text', content: text });
-        } else if (type === 'image' || type === 'audio') {
-          const fileInput = el.querySelector('input[type="file"]');
-          const previewEl = type === 'image' ? el.querySelector('img') : el.querySelector('audio');
-
-          if (fileInput.files.length > 0) {
-            // Upload new file
-            const file = fileInput.files[0];
-            const filePath = `courses/${courseId}/${type}s/${Date.now()}_${file.name}`;
-            try {
-              const url = await uploadFile(file, filePath);
-              contentData.push({ type, content: url });
-            } catch (error) {
-              alert(`Failed to upload ${type} file: ${error.message}`);
-              return;
-            }
-          } else if (previewEl.src) {
-            // Use existing URL if no new file selected
-            contentData.push({ type, content: previewEl.src });
-          } else {
-            contentData.push({ type, content: '' });
-          }
-        }
-      }
-
-      try {
-        await db.collection('courses').doc(courseId).set({
-          title,
-          content: contentData,
-          updatedAt: new Date()
-        }, { merge: true });
-
-        alert('Course saved successfully!');
-      } catch (error) {
-        console.error('Error saving course:', error);
-        alert('Failed to save course.');
-      }
-    }
-
-    // Button event listeners
-    addTextBtn.addEventListener('click', () => createContentBox('text'));
-    addImageBtn.addEventListener('click', () => createContentBox('image'));
-    addAudioBtn.addEventListener('click', () => createContentBox('audio'));
-    saveBtn.addEventListener('click', saveCourse);
-
-    // Load course on page load
-    window.onload = loadCourse;
+    loadCourse();
   </script>
 </body>
 </html>
